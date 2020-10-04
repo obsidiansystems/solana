@@ -16,6 +16,7 @@ use log::*;
 use num_traits::FromPrimitive;
 use serde_json::{self, json, Value};
 use solana_account_decoder::{UiAccount, UiAccountEncoding};
+use solana_bpf_loader_program::{check_elf};
 use solana_budget_program::budget_instruction::{self, BudgetError};
 use solana_clap_utils::{
     commitment::commitment_arg_with_default, input_parsers::*, input_validators::*,
@@ -1393,6 +1394,10 @@ fn process_deploy(
     let mut program_data = Vec::new();
     file.read_to_end(&mut program_data).map_err(|err| {
         CliError::DynamicProgramError(format!("Unable to read program file: {}", err))
+    })?;
+
+    check_elf(&program_data).map_err(|err| {
+        CliError::DynamicProgramError(format!("ELF error: {}", err))
     })?;
 
     let loader_id = if use_deprecated_loader {

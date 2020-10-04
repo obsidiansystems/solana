@@ -3462,6 +3462,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "solana-account-decoder",
+ "solana-bpf-loader-program",
  "solana-budget-program",
  "solana-clap-utils",
  "solana-cli-config",
